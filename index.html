@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE PROCESS: SWEETNESS</title>
+    <style>
+        :root {
+            --bg-earth: #1a120b; /* Deep Earthy Brown */
+            --bg-silk: #3c2a21;  /* Warmer Cocoa */
+            --text-gold: #e5ba73;
+            --text-cream: #faf8f1;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            background-color: var(--bg-earth); 
+            color: var(--text-cream);
+            font-family: 'Georgia', serif;
+            overflow-x: hidden;
+            transition: background-color 1.5s ease;
+        }
+
+        section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1s ease;
+        }
+
+        .visible { opacity: 1; transform: translateY(0); }
+
+        .quote { font-style: italic; font-size: 20px; line-height: 1.6; max-width: 300px; }
+        .sub-text { font-size: 12px; color: var(--text-gold); letter-spacing: 4px; text-transform: uppercase; margin-top: 20px; }
+
+        /* The Six Chocolates Container */
+        #chocolate-grid {
+            display: none; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-top: 30px;
+        }
+        .choc-box {
+            background: rgba(255,255,255,0.05); border: 1px solid var(--text-gold);
+            padding: 15px; border-radius: 10px; font-size: 14px;
+        }
+
+        .btn-pause {
+            margin-top: 30px; padding: 15px 30px; border: 1px solid var(--text-gold);
+            background: transparent; color: var(--text-gold); border-radius: 50px; cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <section id="s1">
+        <div class="quote">"Before chocolate becomes sweet, it begins bitter. Just like most honest things."</div>
+        <div class="sub-text">Section 1: The Seed</div>
+    </section>
+
+    <section id="s4">
+        <div class="quote">"Ground slowly. Turned again and again. Until bitterness learns softness."</div>
+        <div class="sub-text">Section 4: Refinement</div>
+    </section>
+
+    <section id="s6">
+        <div class="quote">"Take your time. Some things shouldn’t be rushed."</div>
+        <button class="btn-pause" onclick="revealSweetness()">Unveil the Journey</button>
+    </section>
+
+    <section id="s7">
+        <div id="chocolate-grid">
+            <div class="choc-box">Month 1: [Your Message]</div>
+            <div class="choc-box">Month 2: [Your Message]</div>
+            <div class="choc-box">Month 3: [Your Message]</div>
+            <div class="choc-box">Month 4: [Your Message]</div>
+            <div class="choc-box">Month 5: [Your Message]</div>
+            <div class="choc-box">Month 6: [Your Message]</div>
+        </div>
+        <div class="main-msg" id="final-reformation" style="display:none; margin-top: 50px;">
+            <p>"After everything, it becomes one. Not perfect. Just real."</p>
+        </div>
+    </section>
+
+    <script>
+        // Simple Intersection Observer for scroll reveal
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    // Change background based on section
+                    if(entry.target.id === 's4') document.body.style.backgroundColor = '#3c2a21';
+                }
+            });
+        }, { threshold: 0.5 });
+
+        document.querySelectorAll('section').forEach(s => observer.observe(s));
+
+        function revealSweetness() {
+            document.getElementById('chocolate-grid').style.display = 'grid';
+            document.getElementById('final-reformation').style.display = 'block';
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
+
