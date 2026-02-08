@@ -10,73 +10,85 @@
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         
         body { 
-            background-color: #120907; 
+            background-color: #0c0605; 
             color: #fdfaf6;
             font-family: 'Lora', serif;
             overflow-x: hidden;
-            display: flex; flex-direction: column; align-items: center;
+            scroll-behavior: smooth;
         }
 
-        /* 1. HOLD SCREEN */
+        /* 1. THE GATEKEEPER */
         #hold-screen {
             height: 100vh; width: 100%; display: flex; flex-direction: column; 
-            justify-content: center; align-items: center; z-index: 10;
-            transition: opacity 1s ease;
+            justify-content: center; align-items: center; z-index: 1000;
+            position: fixed; background: #0c0605;
+            transition: opacity 1.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .melt-container {
-            position: relative; width: 140px; height: 140px; margin: 30px auto;
+            position: relative; width: 150px; height: 150px; margin: 30px auto;
             display: flex; justify-content: center; align-items: center; cursor: pointer;
         }
 
-        .choc-heart { font-size: 70px; transition: transform 0.3s; z-index: 2; user-select: none; }
+        .choc-heart { font-size: 75px; transition: transform 0.3s; z-index: 2; user-select: none; }
         
         .progress-ring {
-            position: absolute; width: 120px; height: 120px; border-radius: 50%;
+            position: absolute; width: 130px; height: 130px; border-radius: 50%;
             border: 1px solid rgba(212, 163, 115, 0.1); border-top: 3px solid #d4a373;
             opacity: 0; transition: opacity 0.3s;
         }
 
-        /* 2. JOURNEY SCREEN */
+        /* 2. THE STORY FLOW */
         #journey-screen {
-            display: none; width: 100%; max-width: 400px; padding: 80px 25px;
-            text-align: left;
+            display: none; width: 100%;
         }
 
-        .story-card {
-            background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px);
-            border-left: 3px solid #d4a373; border-radius: 5px 20px 20px 5px;
-            padding: 25px; margin-bottom: 40px; opacity: 0; transform: translateY(30px);
-            transition: 1.5s all cubic-bezier(0.2, 1, 0.3, 1); display: flex; align-items: flex-start; gap: 15px;
+        .story-moment {
+            height: 100vh; 
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            text-align: center; padding: 0 40px; opacity: 0; transform: translateY(50px);
+            transition: 2s all cubic-bezier(0.2, 1, 0.3, 1);
         }
 
-        .story-card.show { opacity: 1; transform: translateY(0); }
-        .story-emoji { font-size: 28px; filter: drop-shadow(0 0 5px rgba(212, 163, 115, 0.4)); }
-        .story-card p { font-size: 16px; line-height: 1.8; font-style: italic; opacity: 0.95; font-weight: 300; }
+        .story-moment.show { opacity: 1; transform: translateY(0); }
 
-        /* 3. FINAL REVEAL (The Melt) */
+        .story-emoji { font-size: 45px; margin-bottom: 30px; }
+        .story-text { font-size: 19px; line-height: 1.8; font-style: italic; font-weight: 300; max-width: 360px; white-space: pre-line; }
+
+        /* 3. THE MELT REVEAL */
         #final-reveal {
-            display: none; position: fixed; inset: 0; z-index: 100;
+            display: none; position: fixed; inset: 0; z-index: 2000;
             background: #000; justify-content: center; align-items: center;
         }
 
         .choc-bite {
-            position: absolute; font-size: 45px; transition: 1.8s all cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 102; opacity: 1;
+            position: absolute; font-size: 55px; transition: 2.2s all cubic-bezier(0.5, 0, 0.1, 1);
+            z-index: 2002; opacity: 1;
         }
 
-        /* Placeholder for your future picture */
-        .revealed-photo {
-            width: 85%; max-width: 350px; height: 450px; border-radius: 20px;
-            background: #1a1a1a; /* Dark placeholder color */
-            object-fit: cover; box-shadow: 0 0 50px rgba(212, 163, 115, 0.2);
-            opacity: 0; transform: scale(0.95); transition: 2.5s all ease;
-        }
-
+        /* Message Glow Effect */
         .final-msg {
-            position: absolute; bottom: 8%; width: 100%; text-align: center;
-            font-family: 'Dancing Script', cursive; font-size: 26px; color: #d4a373;
-            opacity: 0; transition: 2s all ease; padding: 0 20px;
+            text-align: center;
+            font-family: 'Dancing Script', cursive;
+            font-size: 32px;
+            color: #d4a373;
+            opacity: 0;
+            transform: scale(0.9);
+            transition: 4s all ease;
+            padding: 20px;
+            line-height: 1.6;
+            text-shadow: 0 0 20px rgba(212, 163, 115, 0.3);
+        }
+
+        .final-msg span {
+            display: block;
+            font-family: 'Lora', serif;
+            font-size: 12px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-top: 30px;
+            opacity: 0.5;
+            font-style: normal;
         }
 
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -85,44 +97,72 @@
 <body>
 
     <div id="hold-screen">
-        <p style="font-family: 'Dancing Script', cursive; font-size: 38px; color: #d4a373;">The Essence</p>
+        <p style="font-family: 'Dancing Script', cursive; font-size: 42px; color: #d4a373; margin-bottom: 15px;">The Essence</p>
         <div class="melt-container" id="melt-trigger">
             <div class="progress-ring" id="spinner"></div>
             <div class="choc-heart" id="heart-icon">🤎</div>
         </div>
-        <p style="font-size: 11px; letter-spacing: 4px; color: #d4a373; opacity: 0.6;">HOLD TO BEGIN</p>
+        <p style="font-size: 11px; letter-spacing: 6px; color: #d4a373; opacity: 0.4;">HOLD TO START</p>
     </div>
 
     <div id="journey-screen">
-        <div class="story-card">
-            <span class="story-emoji">🌱</span>
-            <p>We started as a quiet hope. A raw seed of something I didn't yet know would become my entire world.</p>
-        </div>
-        <div class="story-card">
-            <span class="story-emoji">✨</span>
-            <p>I learned quickly that you are rare. Every conversation we had was like a harvest, gathering the beautiful pieces of who you are.</p>
-        </div>
-        <div class="story-card">
-            <span class="story-emoji">🔥</span>
-            <p>Life brought us heat, but it didn't burn us. It only softened our rough edges and made our bond stronger than ever.</p>
-        </div>
-        <div class="story-card">
-            <span class="story-emoji">🤍</span>
-            <p>Through the months, I stopped looking for "perfection." I found you, and realized that was the only flavor my heart ever needed.</p>
-        </div>
-        <div class="story-card">
-            <span class="story-emoji">🍫</span>
-            <p>Six months later, the bitterness is gone. All that's left is this earned sweetness—a love that was made with intention.</p>
+        <div class="story-moment">
+            <div class="story-emoji">🌱</div>
+            <p class="story-text">Some things start
+            without asking to be defined.
+            No rush. No explanation.
+            Just a quiet sense that
+            something feels easy to be around.</p>
         </div>
         
-        <div id="trigger-point" style="height: 150px; display: flex; justify-content: center; align-items: center;">
-             <p style="color: #d4a373; font-size: 12px; letter-spacing: 2px; opacity: 0.5;">SCROLL TO THE END</p>
+        <div class="story-moment">
+            <div class="story-emoji">🌾</div>
+            <p class="story-text">Care doesn’t always look like action.
+            Sometimes it’s just attention.
+            The kind that listens.
+            The kind that doesn’t interrupt.
+            Nothing expected.
+            Nothing held too tightly.</p>
         </div>
+
+        <div class="story-moment">
+            <div class="story-emoji">🔥</div>
+            <p class="story-text">Not everything stays light.
+            And that’s okay.
+            Warmth isn’t about avoiding pressure —
+            it’s about how gently it’s handled.
+            Some moments pass
+            because they’re allowed to.</p>
+        </div>
+
+        <div class="story-moment">
+            <div class="story-emoji">🌊</div>
+            <p class="story-text">With time, edges soften.
+            Silence feels less heavy.
+            Pauses feel natural.
+            Things don’t need fixing
+            to feel steady.</p>
+        </div>
+
+        <div class="story-moment">
+            <div class="story-emoji">🍫</div>
+            <p class="story-text">And somewhere in that calm,
+            sweetness appears.
+            Not loud. Not claimed.
+            Just present. Just real.
+            Something that exists
+            without needing a name.</p>
+        </div>
+
+        <div id="trigger-point" style="height: 100vh;"></div>
     </div>
 
     <div id="final-reveal">
-        <img src="" class="revealed-photo" id="photo" alt="Our Moment">
-        <div class="final-msg" id="msg">Not perfect. Just real.<br>You are my favorite story.</div>
+        <div class="final-msg" id="msg">
+            Not perfect. Just real.<br>
+            You are my favorite story.
+            <span>With Intention, Deep</span>
+        </div>
     </div>
 
     <script>
@@ -135,7 +175,7 @@
             e.preventDefault();
             spinner.style.opacity = "1";
             spinner.style.animation = "spin 2s linear infinite";
-            heart.style.transform = "scale(0.85)";
+            heart.style.transform = "scale(0.8)";
             pressTimer = window.setTimeout(showJourney, 2000);
         }
 
@@ -156,30 +196,35 @@
             setTimeout(() => {
                 document.getElementById('hold-screen').style.display = "none";
                 document.getElementById('journey-screen').style.display = "block";
-                
-                const cards = document.querySelectorAll('.story-card');
-                cards.forEach((card, i) => {
-                    setTimeout(() => card.classList.add('show'), i * 1000);
-                });
-            }, 800);
+                checkScroll();
+            }, 1500);
         }
 
-        window.addEventListener('scroll', () => {
+        function checkScroll() {
+            const moments = document.querySelectorAll('.story-moment');
+            moments.forEach(m => {
+                const rect = m.getBoundingClientRect();
+                if (rect.top < window.innerHeight * 0.8) {
+                    m.classList.add('show');
+                }
+            });
+
             const triggerPoint = document.getElementById('trigger-point');
-            if (triggerPoint && triggerPoint.getBoundingClientRect().top < window.innerHeight - 50) {
+            if (triggerPoint && triggerPoint.getBoundingClientRect().top < window.innerHeight * 0.4) {
                 if (document.getElementById('final-reveal').style.display !== 'flex') {
                     startFinalAnimation();
                 }
             }
-        });
+        }
+
+        window.addEventListener('scroll', checkScroll);
 
         function startFinalAnimation() {
             const reveal = document.getElementById('final-reveal');
             reveal.style.display = 'flex';
-            window.scrollTo(0, 0);
             document.body.style.overflow = 'hidden';
 
-            for(let i=0; i<15; i++) {
+            for(let i=0; i<20; i++) {
                 const bite = document.createElement('div');
                 bite.className = 'choc-bite';
                 bite.innerHTML = '🍫';
@@ -190,16 +235,16 @@
                 setTimeout(() => {
                     bite.style.left = '50vw';
                     bite.style.top = '50vh';
-                    bite.style.transform = 'translate(-50%, -50%) scale(3)';
+                    bite.style.transform = 'translate(-50%, -50%) scale(5)';
                     bite.style.opacity = '0';
-                }, 200 + (i * 120));
+                }, 100 + (i * 120));
             }
 
             setTimeout(() => {
-                document.getElementById('photo').style.opacity = '1';
-                document.getElementById('photo').style.transform = 'scale(1)';
-                document.getElementById('msg').style.opacity = '1';
-            }, 2600);
+                const msg = document.getElementById('msg');
+                msg.style.opacity = '1';
+                msg.style.transform = 'scale(1)';
+            }, 3000);
         }
     </script>
 </body>
