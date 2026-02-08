@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>With Intention</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Lora:ital,wght@0,400;1,400&family=Quicksand:wght@300;500&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Lora:ital,wght@0,400;1,400&display=swap');
 
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         
@@ -13,157 +13,139 @@
             background-color: #120907; 
             color: #fdfaf6;
             font-family: 'Lora', serif;
-            overflow-x: hidden;
-            transition: background-color 2.5s ease;
+            overflow: hidden;
+            display: flex; justify-content: center; align-items: center;
+            height: 100vh;
         }
 
-        /* Magical floating particles */
-        .particles {
-            position: fixed; inset: 0; pointer-events: none; z-index: 1;
+        /* Floating Atmosphere */
+        .bg-glow {
+            position: fixed; width: 300px; height: 300px;
+            background: radial-gradient(circle, rgba(212, 163, 115, 0.1) 0%, transparent 70%);
+            border-radius: 50%; pointer-events: none; z-index: 1;
         }
 
-        section {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 40px;
-            position: relative;
-            z-index: 2;
+        /* Interaction Screen */
+        #hold-screen {
+            position: relative; z-index: 10; text-align: center;
+            transition: opacity 1s ease;
         }
-
-        .fade-in { opacity: 0; transform: translateY(30px); transition: all 1.8s cubic-bezier(0.22, 1, 0.36, 1); }
-        .fade-in.visible { opacity: 1; transform: translateY(0); }
-
-        .script-font { font-family: 'Dancing Script', cursive; font-size: 38px; color: #d4a373; margin-bottom: 20px; text-shadow: 0 0 15px rgba(212, 163, 115, 0.3); }
 
         .melt-container {
-            position: relative; width: 140px; height: 140px; margin: 40px auto;
+            position: relative; width: 140px; height: 140px; margin: 30px auto;
             display: flex; justify-content: center; align-items: center; cursor: pointer;
         }
 
-        .choc-heart {
-            font-size: 70px; transition: transform 0.4s, opacity 0.8s; z-index: 2;
-            user-select: none; -webkit-user-select: none;
+        .choc-heart { font-size: 70px; transition: transform 0.3s; z-index: 2; user-select: none; }
+        
+        .progress-ring {
+            position: absolute; width: 120px; height: 120px; border-radius: 50%;
+            border: 2px solid rgba(212, 163, 115, 0.1); border-top: 3px solid #d4a373;
+            opacity: 0; transition: opacity 0.3s;
         }
 
-        .melt-progress {
-            position: absolute; width: 110px; height: 110px; border-radius: 50%;
-            border: 1px solid rgba(212, 163, 115, 0.1); border-top: 3px solid #d4a373;
-            opacity: 0; transition: opacity 0.4s;
-        }
-
-        /* Romantic Cards */
-        #narrative-grid {
-            display: none; grid-template-columns: 1fr; gap: 30px; width: 100%; max-width: 350px; margin-top: 40px;
+        /* Journey Screen */
+        #journey-screen {
+            display: none; position: fixed; inset: 0; z-index: 20;
+            background: #120907; padding: 40px 20px;
+            overflow-y: auto; text-align: left;
         }
 
         .story-card {
-            background: rgba(255, 255, 255, 0.04); backdrop-filter: blur(10px);
-            border: 1px solid rgba(212, 163, 115, 0.2); padding: 25px;
-            border-radius: 20px; text-align: left; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(15px);
+            border: 1px solid rgba(212, 163, 115, 0.2); border-radius: 20px;
+            padding: 25px; margin-bottom: 25px; opacity: 0; transform: translateY(20px);
+            transition: 1s all ease; display: flex; align-items: flex-start; gap: 15px;
         }
 
-        .story-card span { color: #d4a373; font-family: 'Dancing Script', cursive; font-size: 22px; display: block; margin-bottom: 10px; }
-        .story-card p { font-size: 15px; line-height: 1.8; opacity: 0.9; font-weight: 400; font-style: italic; }
+        .story-card.show { opacity: 1; transform: translateY(0); }
+        .story-emoji { font-size: 24px; }
+        .story-card p { font-size: 15px; line-height: 1.7; font-style: italic; opacity: 0.9; }
 
-        .final-sig { margin-top: 80px; font-style: normal; opacity: 0.8; font-size: 14px; letter-spacing: 3px; color: #d4a373; }
-        .punjabi-soul { font-size: 20px; margin-top: 20px; font-weight: bold; color: #fff; line-height: 1.6; }
+        /* Final Reveal Animation */
+        #final-reveal {
+            display: none; position: fixed; inset: 0; z-index: 100;
+            background: #000; justify-content: center; align-items: center;
+        }
+
+        .choc-bite {
+            position: absolute; font-size: 40px; transition: 1.5s all ease-in-out;
+            z-index: 102; opacity: 1;
+        }
+
+        .revealed-photo {
+            width: 85%; max-width: 350px; border-radius: 20px;
+            box-shadow: 0 0 30px rgba(212, 163, 115, 0.4);
+            opacity: 0; transform: scale(0.9); transition: 2s all ease;
+        }
+
+        .final-msg {
+            position: absolute; bottom: 50px; width: 100%; text-align: center;
+            font-family: 'Dancing Script', cursive; font-size: 24px; color: #d4a373;
+            opacity: 0; transition: 2s all ease; padding: 0 20px;
+        }
 
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        @keyframes float { 0% { transform: translateY(0); } 50% { transform: translateY(-20px); } 100% { transform: translateY(0); } }
     </style>
 </head>
 <body>
 
-    <div class="particles" id="particles"></div>
+    <div class="bg-glow"></div>
 
-    <section id="p1">
-        <div class="fade-in">
-            <p class="script-font">Honesty</p>
-            <p>"Before chocolate becomes sweet, it begins bitter. Just like most honest things."</p>
+    <div id="hold-screen">
+        <p style="font-family: 'Dancing Script', cursive; font-size: 32px; color: #d4a373;">The Essence</p>
+        <p style="font-size: 13px; opacity: 0.6; margin-top: 5px;">A story earned, not given.</p>
+        
+        <div class="melt-container" id="melt-trigger">
+            <div class="progress-ring" id="spinner"></div>
+            <div class="choc-heart" id="heart-icon">🤎</div>
         </div>
-    </section>
+        <p style="font-size: 11px; letter-spacing: 2px; color: #d4a373;">HOLD TO UNVEIL</p>
+    </div>
 
-    <section id="p2">
-        <div class="fade-in">
-            <p class="script-font">The Balance</p>
-            <p>Heat changes everything. Too much, and it burns. Too little, and it stays raw.</p>
-            <p style="margin-top:15px; font-size:14px; color:#d4a373; letter-spacing: 1px;">In you, I found my warmth.</p>
+    <div id="journey-screen">
+        <div class="story-card">
+            <span class="story-emoji">🌱</span>
+            <p>We started as raw seed, full of potential yet yet to be discovered.</p>
         </div>
-    </section>
-
-    <section id="p4">
-        <div class="fade-in">
-            <p class="script-font">The Unveiling</p>
-            <p style="font-size: 15px; opacity: 0.8; margin-bottom: 10px;">Six months of layers...</p>
-            <div class="melt-container" id="melt-trigger">
-                <div class="melt-progress" id="spinner"></div>
-                <div class="choc-heart" id="heart-icon">🤎</div>
-            </div>
-            <p id="hint-text" style="font-size: 11px; color: #d4a373; letter-spacing: 2px;">HOLD TO LET GO</p>
+        <div class="story-card">
+            <span class="story-emoji">🤲</span>
+            <p>Handled with care, every shared moment a precious harvest.</p>
         </div>
-    </section>
-
-    <section id="s-final" style="display:none; min-height: auto; padding-bottom: 150px;">
-        <div id="narrative-grid">
-            <div class="story-card"><span>The Seed</span><p>I remember us at the start—two strangers with nothing but potential. It wasn't sweet yet, but it was honest. And that honesty was the only seed I ever wanted to grow.</p></div>
-            <div class="story-card"><span>The Care</span><p>I learned quickly that you are rare. Handling 'us' became my favorite habit. I realized that the best things in life aren't found; they are carefully built, one quiet moment at a time.</p></div>
-            <div class="story-card"><span>The Warmth</span><p>When life got heavy, your presence was the heat that transformed my cold days. We didn't break under pressure; we just became a version of 'us' that I never want to lose.</p></div>
-            <div class="story-card"><span>The Softness</span><p>You taught me that strength isn't about being hard; it's about the softness we show each other. Every rough edge I had, you smoothed away with just a smile.</p></div>
-            <div class="story-card"><span>The Choice</span><p>Months passed, and I stopped looking for 'perfection' because I found 'you'. You became the flavor of my every thought, the only rhythm my heart wanted to follow.</p></div>
-            <div class="story-card"><span>The Sweetness</span><p>Six months later, here we are. This isn't just chocolate; it's the earned sweetness of every laugh, every talk, and every day I chose you. And I’d choose you again, every single time.</p></div>
+        <div class="story-card">
+            <span class="story-emoji">🔥</span>
+            <p>Pressure could have broken us, but it became what shaped our bond.</p>
+        </div>
+        <div class="story-card">
+            <span class="story-emoji">✨</span>
+            <p>With patience, our rough edges turned into a gentle sweetness.</p>
+        </div>
+        <div class="story-card">
+            <span class="story-emoji">🍫</span>
+            <p>Six months, and now here we are—something meant to last.</p>
         </div>
 
-        <div class="fade-in visible" style="margin-top: 100px;">
-            <p class="script-font">Not perfect. Just real.</p>
-            <div class="punjabi-soul">"Tuc meri mohabbat di oh mithaas ho,<br>jisnu m kade khona nahi chaunda."</div>
-            <p class="final-sig">WITH INTENTION, DEEP</p>
-        </div>
-    </section>
+        <button onclick="startFinalAnimation()" style="background:transparent; border:1px solid #d4a373; color:#d4a373; padding:15px 30px; border-radius:50px; margin: 40px auto; display:block; font-size:12px; letter-spacing:2px;">REVEAL THE TRUTH</button>
+    </div>
+
+    <div id="final-reveal">
+        <img src="YOUR_PHOTO_URL_HERE" class="revealed-photo" id="photo">
+        <div class="final-msg" id="msg">Not perfect. Just real.<br>You are my favorite story.</div>
+    </div>
 
     <script>
-        // Particles background
-        const pContainer = document.getElementById('particles');
-        for (let i = 0; i < 30; i++) {
-            const p = document.createElement('div');
-            p.style.position = 'absolute';
-            p.style.width = Math.random() * 3 + 'px';
-            p.style.height = p.style.width;
-            p.style.background = 'rgba(212, 163, 115, 0.3)';
-            p.style.borderRadius = '50%';
-            p.style.top = Math.random() * 100 + '%';
-            p.style.left = Math.random() * 100 + '%';
-            p.style.animation = `float ${Math.random() * 3 + 2}s infinite ease-in-out`;
-            pContainer.appendChild(p);
-        }
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.querySelector('.fade-in').classList.add('visible');
-                    if(entry.target.id === 'p1') document.body.style.backgroundColor = '#120907';
-                    if(entry.target.id === 'p2') document.body.style.backgroundColor = '#24140e';
-                    if(entry.target.id === 'p4') document.body.style.backgroundColor = '#2d1b14';
-                }
-            });
-        }, { threshold: 0.4 });
-
-        document.querySelectorAll('section').forEach(s => observer.observe(s));
-
         let pressTimer;
         const trigger = document.getElementById('melt-trigger');
         const heart = document.getElementById('heart-icon');
         const spinner = document.getElementById('spinner');
 
+        // HOLD LOGIC
         function startPress(e) {
             e.preventDefault();
             spinner.style.opacity = "1";
             spinner.style.animation = "spin 2s linear infinite";
-            heart.style.transform = "scale(0.8)";
-            pressTimer = window.setTimeout(revealFinal, 2000);
+            heart.style.transform = "scale(0.85)";
+            pressTimer = window.setTimeout(showJourney, 2000);
         }
 
         function cancelPress() {
@@ -173,21 +155,52 @@
             heart.style.transform = "scale(1)";
         }
 
-        trigger.addEventListener('mousedown', startPress);
         trigger.addEventListener('touchstart', startPress);
-        trigger.addEventListener('mouseup', cancelPress);
+        trigger.addEventListener('mousedown', startPress);
         trigger.addEventListener('touchend', cancelPress);
+        trigger.addEventListener('mouseup', cancelPress);
 
-        function revealFinal() {
-            heart.style.transform = "scale(0)";
-            heart.style.opacity = "0";
-            spinner.style.opacity = "0";
-            document.getElementById('hint-text').style.opacity = "0";
+        function showJourney() {
+            document.getElementById('hold-screen').style.opacity = "0";
             setTimeout(() => {
-                document.getElementById('s-final').style.display = "flex";
-                document.getElementById('narrative-grid').style.display = "grid";
-                window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-            }, 600);
+                document.getElementById('hold-screen').style.display = "none";
+                document.getElementById('journey-screen').style.display = "block";
+                
+                // Staggered card reveal
+                const cards = document.querySelectorAll('.story-card');
+                cards.forEach((card, i) => {
+                    setTimeout(() => card.classList.add('show'), i * 800);
+                });
+            }, 1000);
+        }
+
+        function startFinalAnimation() {
+            const reveal = document.getElementById('final-reveal');
+            reveal.style.display = 'flex';
+
+            // Create chocolate bites animation
+            for(let i=0; i<12; i++) {
+                const bite = document.createElement('div');
+                bite.className = 'choc-bite';
+                bite.innerHTML = '🍫';
+                bite.style.left = Math.random() * 100 + 'vw';
+                bite.style.top = Math.random() * 100 + 'vh';
+                reveal.appendChild(bite);
+
+                setTimeout(() => {
+                    bite.style.left = '50vw';
+                    bite.style.top = '50vh';
+                    bite.style.transform = 'translate(-50%, -50%) scale(2)';
+                    bite.style.opacity = '0';
+                }, 100 + (i * 100));
+            }
+
+            // Show photo after bites melt
+            setTimeout(() => {
+                document.getElementById('photo').style.opacity = '1';
+                document.getElementById('photo').style.transform = 'scale(1)';
+                document.getElementById('msg').style.opacity = '1';
+            }, 2000);
         }
     </script>
 </body>
