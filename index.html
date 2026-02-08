@@ -13,21 +13,14 @@
             background-color: #120907; 
             color: #fdfaf6;
             font-family: 'Lora', serif;
-            overflow: hidden;
-            display: flex; justify-content: center; align-items: center;
-            height: 100vh;
+            overflow-x: hidden;
+            display: flex; flex-direction: column; align-items: center;
         }
 
-        /* Floating Atmosphere */
-        .bg-glow {
-            position: fixed; width: 300px; height: 300px;
-            background: radial-gradient(circle, rgba(212, 163, 115, 0.1) 0%, transparent 70%);
-            border-radius: 50%; pointer-events: none; z-index: 1;
-        }
-
-        /* Interaction Screen */
+        /* 1. HOLD SCREEN */
         #hold-screen {
-            position: relative; z-index: 10; text-align: center;
+            height: 100vh; width: 100%; display: flex; flex-direction: column; 
+            justify-content: center; align-items: center; z-index: 10;
             transition: opacity 1s ease;
         }
 
@@ -40,48 +33,49 @@
         
         .progress-ring {
             position: absolute; width: 120px; height: 120px; border-radius: 50%;
-            border: 2px solid rgba(212, 163, 115, 0.1); border-top: 3px solid #d4a373;
+            border: 1px solid rgba(212, 163, 115, 0.1); border-top: 3px solid #d4a373;
             opacity: 0; transition: opacity 0.3s;
         }
 
-        /* Journey Screen */
+        /* 2. JOURNEY SCREEN */
         #journey-screen {
-            display: none; position: fixed; inset: 0; z-index: 20;
-            background: #120907; padding: 40px 20px;
-            overflow-y: auto; text-align: left;
+            display: none; width: 100%; max-width: 400px; padding: 80px 25px;
+            text-align: left;
         }
 
         .story-card {
-            background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(15px);
-            border: 1px solid rgba(212, 163, 115, 0.2); border-radius: 20px;
-            padding: 25px; margin-bottom: 25px; opacity: 0; transform: translateY(20px);
-            transition: 1s all ease; display: flex; align-items: flex-start; gap: 15px;
+            background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px);
+            border-left: 3px solid #d4a373; border-radius: 5px 20px 20px 5px;
+            padding: 25px; margin-bottom: 40px; opacity: 0; transform: translateY(30px);
+            transition: 1.5s all cubic-bezier(0.2, 1, 0.3, 1); display: flex; align-items: flex-start; gap: 15px;
         }
 
         .story-card.show { opacity: 1; transform: translateY(0); }
-        .story-emoji { font-size: 24px; }
-        .story-card p { font-size: 15px; line-height: 1.7; font-style: italic; opacity: 0.9; }
+        .story-emoji { font-size: 28px; filter: drop-shadow(0 0 5px rgba(212, 163, 115, 0.4)); }
+        .story-card p { font-size: 16px; line-height: 1.8; font-style: italic; opacity: 0.95; font-weight: 300; }
 
-        /* Final Reveal Animation */
+        /* 3. FINAL REVEAL (The Melt) */
         #final-reveal {
             display: none; position: fixed; inset: 0; z-index: 100;
             background: #000; justify-content: center; align-items: center;
         }
 
         .choc-bite {
-            position: absolute; font-size: 40px; transition: 1.5s all ease-in-out;
+            position: absolute; font-size: 45px; transition: 1.8s all cubic-bezier(0.4, 0, 0.2, 1);
             z-index: 102; opacity: 1;
         }
 
+        /* Placeholder for your future picture */
         .revealed-photo {
-            width: 85%; max-width: 350px; border-radius: 20px;
-            box-shadow: 0 0 30px rgba(212, 163, 115, 0.4);
-            opacity: 0; transform: scale(0.9); transition: 2s all ease;
+            width: 85%; max-width: 350px; height: 450px; border-radius: 20px;
+            background: #1a1a1a; /* Dark placeholder color */
+            object-fit: cover; box-shadow: 0 0 50px rgba(212, 163, 115, 0.2);
+            opacity: 0; transform: scale(0.95); transition: 2.5s all ease;
         }
 
         .final-msg {
-            position: absolute; bottom: 50px; width: 100%; text-align: center;
-            font-family: 'Dancing Script', cursive; font-size: 24px; color: #d4a373;
+            position: absolute; bottom: 8%; width: 100%; text-align: center;
+            font-family: 'Dancing Script', cursive; font-size: 26px; color: #d4a373;
             opacity: 0; transition: 2s all ease; padding: 0 20px;
         }
 
@@ -90,46 +84,44 @@
 </head>
 <body>
 
-    <div class="bg-glow"></div>
-
     <div id="hold-screen">
-        <p style="font-family: 'Dancing Script', cursive; font-size: 32px; color: #d4a373;">The Essence</p>
-        <p style="font-size: 13px; opacity: 0.6; margin-top: 5px;">A story earned, not given.</p>
-        
+        <p style="font-family: 'Dancing Script', cursive; font-size: 38px; color: #d4a373;">The Essence</p>
         <div class="melt-container" id="melt-trigger">
             <div class="progress-ring" id="spinner"></div>
             <div class="choc-heart" id="heart-icon">🤎</div>
         </div>
-        <p style="font-size: 11px; letter-spacing: 2px; color: #d4a373;">HOLD TO UNVEIL</p>
+        <p style="font-size: 11px; letter-spacing: 4px; color: #d4a373; opacity: 0.6;">HOLD TO BEGIN</p>
     </div>
 
     <div id="journey-screen">
         <div class="story-card">
             <span class="story-emoji">🌱</span>
-            <p>We started as raw seed, full of potential yet yet to be discovered.</p>
-        </div>
-        <div class="story-card">
-            <span class="story-emoji">🤲</span>
-            <p>Handled with care, every shared moment a precious harvest.</p>
-        </div>
-        <div class="story-card">
-            <span class="story-emoji">🔥</span>
-            <p>Pressure could have broken us, but it became what shaped our bond.</p>
+            <p>We started as a quiet hope. A raw seed of something I didn't yet know would become my entire world.</p>
         </div>
         <div class="story-card">
             <span class="story-emoji">✨</span>
-            <p>With patience, our rough edges turned into a gentle sweetness.</p>
+            <p>I learned quickly that you are rare. Every conversation we had was like a harvest, gathering the beautiful pieces of who you are.</p>
+        </div>
+        <div class="story-card">
+            <span class="story-emoji">🔥</span>
+            <p>Life brought us heat, but it didn't burn us. It only softened our rough edges and made our bond stronger than ever.</p>
+        </div>
+        <div class="story-card">
+            <span class="story-emoji">🤍</span>
+            <p>Through the months, I stopped looking for "perfection." I found you, and realized that was the only flavor my heart ever needed.</p>
         </div>
         <div class="story-card">
             <span class="story-emoji">🍫</span>
-            <p>Six months, and now here we are—something meant to last.</p>
+            <p>Six months later, the bitterness is gone. All that's left is this earned sweetness—a love that was made with intention.</p>
         </div>
-
-        <button onclick="startFinalAnimation()" style="background:transparent; border:1px solid #d4a373; color:#d4a373; padding:15px 30px; border-radius:50px; margin: 40px auto; display:block; font-size:12px; letter-spacing:2px;">REVEAL THE TRUTH</button>
+        
+        <div id="trigger-point" style="height: 150px; display: flex; justify-content: center; align-items: center;">
+             <p style="color: #d4a373; font-size: 12px; letter-spacing: 2px; opacity: 0.5;">SCROLL TO THE END</p>
+        </div>
     </div>
 
     <div id="final-reveal">
-        <img src="YOUR_PHOTO_URL_HERE" class="revealed-photo" id="photo">
+        <img src="" class="revealed-photo" id="photo" alt="Our Moment">
         <div class="final-msg" id="msg">Not perfect. Just real.<br>You are my favorite story.</div>
     </div>
 
@@ -139,7 +131,6 @@
         const heart = document.getElementById('heart-icon');
         const spinner = document.getElementById('spinner');
 
-        // HOLD LOGIC
         function startPress(e) {
             e.preventDefault();
             spinner.style.opacity = "1";
@@ -166,20 +157,29 @@
                 document.getElementById('hold-screen').style.display = "none";
                 document.getElementById('journey-screen').style.display = "block";
                 
-                // Staggered card reveal
                 const cards = document.querySelectorAll('.story-card');
                 cards.forEach((card, i) => {
-                    setTimeout(() => card.classList.add('show'), i * 800);
+                    setTimeout(() => card.classList.add('show'), i * 1000);
                 });
-            }, 1000);
+            }, 800);
         }
+
+        window.addEventListener('scroll', () => {
+            const triggerPoint = document.getElementById('trigger-point');
+            if (triggerPoint && triggerPoint.getBoundingClientRect().top < window.innerHeight - 50) {
+                if (document.getElementById('final-reveal').style.display !== 'flex') {
+                    startFinalAnimation();
+                }
+            }
+        });
 
         function startFinalAnimation() {
             const reveal = document.getElementById('final-reveal');
             reveal.style.display = 'flex';
+            window.scrollTo(0, 0);
+            document.body.style.overflow = 'hidden';
 
-            // Create chocolate bites animation
-            for(let i=0; i<12; i++) {
+            for(let i=0; i<15; i++) {
                 const bite = document.createElement('div');
                 bite.className = 'choc-bite';
                 bite.innerHTML = '🍫';
@@ -190,17 +190,16 @@
                 setTimeout(() => {
                     bite.style.left = '50vw';
                     bite.style.top = '50vh';
-                    bite.style.transform = 'translate(-50%, -50%) scale(2)';
+                    bite.style.transform = 'translate(-50%, -50%) scale(3)';
                     bite.style.opacity = '0';
-                }, 100 + (i * 100));
+                }, 200 + (i * 120));
             }
 
-            // Show photo after bites melt
             setTimeout(() => {
                 document.getElementById('photo').style.opacity = '1';
                 document.getElementById('photo').style.transform = 'scale(1)';
                 document.getElementById('msg').style.opacity = '1';
-            }, 2000);
+            }, 2600);
         }
     </script>
 </body>
