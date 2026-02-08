@@ -5,16 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>With Intention</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Quicksand:wght@300;500&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Lora:ital,wght@0,400;1,400&family=Quicksand:wght@300;500&display=swap');
 
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         
         body { 
-            background-color: #1a0f0a; 
+            background-color: #120907; 
             color: #fdfaf6;
-            font-family: 'Quicksand', sans-serif;
+            font-family: 'Lora', serif;
             overflow-x: hidden;
             transition: background-color 2.5s ease;
+        }
+
+        /* Magical floating particles */
+        .particles {
+            position: fixed; inset: 0; pointer-events: none; z-index: 1;
         }
 
         section {
@@ -25,145 +30,123 @@
             align-items: center;
             text-align: center;
             padding: 40px;
-        }
-
-        .fade-in { opacity: 0; transform: translateY(20px); transition: all 1.5s ease-out; }
-        .fade-in.visible { opacity: 1; transform: translateY(0); }
-
-        .script-font { font-family: 'Dancing Script', cursive; font-size: 34px; color: #d4a373; margin-bottom: 20px; }
-
-        .melt-container {
             position: relative;
-            width: 120px;
-            height: 120px;
-            margin: 40px auto;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-        }
-
-        .choc-heart {
-            font-size: 65px;
-            transition: transform 0.3s, opacity 0.8s;
             z-index: 2;
         }
 
-        .melt-progress {
-            position: absolute;
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            border: 1px solid rgba(212, 163, 115, 0.3);
-            border-top: 2px solid #d4a373;
-            opacity: 0;
-            transition: opacity 0.4s;
+        .fade-in { opacity: 0; transform: translateY(30px); transition: all 1.8s cubic-bezier(0.22, 1, 0.36, 1); }
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+        .script-font { font-family: 'Dancing Script', cursive; font-size: 38px; color: #d4a373; margin-bottom: 20px; text-shadow: 0 0 15px rgba(212, 163, 115, 0.3); }
+
+        .melt-container {
+            position: relative; width: 140px; height: 140px; margin: 40px auto;
+            display: flex; justify-content: center; align-items: center; cursor: pointer;
         }
 
+        .choc-heart {
+            font-size: 70px; transition: transform 0.4s, opacity 0.8s; z-index: 2;
+            user-select: none; -webkit-user-select: none;
+        }
+
+        .melt-progress {
+            position: absolute; width: 110px; height: 110px; border-radius: 50%;
+            border: 1px solid rgba(212, 163, 115, 0.1); border-top: 3px solid #d4a373;
+            opacity: 0; transition: opacity 0.4s;
+        }
+
+        /* Romantic Cards */
         #narrative-grid {
-            display: none;
-            grid-template-columns: 1fr;
-            gap: 20px;
-            width: 100%;
-            max-width: 350px;
-            margin-top: 40px;
+            display: none; grid-template-columns: 1fr; gap: 30px; width: 100%; max-width: 350px; margin-top: 40px;
         }
 
         .story-card {
-            background: rgba(255, 255, 255, 0.02);
-            border-left: 2px solid #d4a373;
-            padding: 20px;
-            text-align: left;
+            background: rgba(255, 255, 255, 0.04); backdrop-filter: blur(10px);
+            border: 1px solid rgba(212, 163, 115, 0.2); padding: 25px;
+            border-radius: 20px; text-align: left; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
-        .story-card p { font-size: 15px; line-height: 1.7; opacity: 0.9; font-weight: 300; }
+        .story-card span { color: #d4a373; font-family: 'Dancing Script', cursive; font-size: 22px; display: block; margin-bottom: 10px; }
+        .story-card p { font-size: 15px; line-height: 1.8; opacity: 0.9; font-weight: 400; font-style: italic; }
 
-        .final-sig { margin-top: 80px; font-style: italic; opacity: 0.5; font-size: 13px; letter-spacing: 2px; }
-
-        /* Restart Button Styling */
-        .restart-btn {
-            margin-top: 60px;
-            background: transparent;
-            border: none;
-            border-bottom: 1px solid rgba(212, 163, 115, 0.4);
-            color: #d4a373;
-            padding: 10px 0;
-            font-size: 11px;
-            letter-spacing: 3px;
-            cursor: pointer;
-            text-transform: uppercase;
-            opacity: 0.6;
-            transition: 0.3s;
-        }
+        .final-sig { margin-top: 80px; font-style: normal; opacity: 0.8; font-size: 14px; letter-spacing: 3px; color: #d4a373; }
+        .punjabi-soul { font-size: 20px; margin-top: 20px; font-weight: bold; color: #fff; line-height: 1.6; }
 
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes float { 0% { transform: translateY(0); } 50% { transform: translateY(-20px); } 100% { transform: translateY(0); } }
     </style>
 </head>
 <body>
 
+    <div class="particles" id="particles"></div>
+
     <section id="p1">
         <div class="fade-in">
-            <p class="script-font">The Beginning</p>
+            <p class="script-font">Honesty</p>
             <p>"Before chocolate becomes sweet, it begins bitter. Just like most honest things."</p>
         </div>
     </section>
 
     <section id="p2">
         <div class="fade-in">
-            <p class="script-font">The Transformation</p>
+            <p class="script-font">The Balance</p>
             <p>Heat changes everything. Too much, and it burns. Too little, and it stays raw.</p>
-            <p style="margin-top:15px; font-size:14px; color:#d4a373; letter-spacing: 1px;">We found our balance.</p>
-        </div>
-    </section>
-
-    <section id="p3">
-        <div class="fade-in">
-            <p class="script-font">The Refinement</p>
-            <p>Ground slowly. Turned again and again. Until bitterness learns softness.</p>
+            <p style="margin-top:15px; font-size:14px; color:#d4a373; letter-spacing: 1px;">In you, I found my warmth.</p>
         </div>
     </section>
 
     <section id="p4">
-        <div class="fade-in" style="width: 100%;">
-            <p class="script-font">The Patience</p>
-            <p style="font-size: 14px; opacity: 0.8;">Some things shouldn't be rushed.</p>
-            
+        <div class="fade-in">
+            <p class="script-font">The Unveiling</p>
+            <p style="font-size: 15px; opacity: 0.8; margin-bottom: 10px;">Six months of layers...</p>
             <div class="melt-container" id="melt-trigger">
                 <div class="melt-progress" id="spinner"></div>
                 <div class="choc-heart" id="heart-icon">🤎</div>
             </div>
-            <p id="hint-text" style="font-size: 11px; color: #d4a373; letter-spacing: 2px;">HOLD TO UNVEIL</p>
+            <p id="hint-text" style="font-size: 11px; color: #d4a373; letter-spacing: 2px;">HOLD TO LET GO</p>
         </div>
     </section>
 
-    <section id="s-final" style="display:none; min-height: auto; padding-bottom: 120px;">
+    <section id="s-final" style="display:none; min-height: auto; padding-bottom: 150px;">
         <div id="narrative-grid">
-            <div class="story-card"><p>We started as a simple seed—raw and unrefined. I didn't know then how much sweetness you were hiding, but I knew I wanted to find out.</p></div>
-            <div class="story-card"><p>Handling our bond with care. Every conversation was like gathering the best parts of us, learning that nothing beautiful should ever be rushed.</p></div>
-            <div class="story-card"><p>Things got warmer. We faced our first little "heats," but they only made us stronger. We didn't burn; we just became more real.</p></div>
-            <div class="story-card"><p>This is where the bitterness learned softness. We smoothed out our edges together, turning our differences into a perfect flow.</p></div>
-            <div class="story-card"><p>Spending hours just revolving around each other until I realized you weren't just a part of my life; you became my favorite flavor.</p></div>
-            <div class="story-card"><p>Finally, we take shape. Six months of patience has turned us into this—something solid, something sweet, something meant to last.</p></div>
+            <div class="story-card"><span>The Seed</span><p>I remember us at the start—two strangers with nothing but potential. It wasn't sweet yet, but it was honest. And that honesty was the only seed I ever wanted to grow.</p></div>
+            <div class="story-card"><span>The Care</span><p>I learned quickly that you are rare. Handling 'us' became my favorite habit. I realized that the best things in life aren't found; they are carefully built, one quiet moment at a time.</p></div>
+            <div class="story-card"><span>The Warmth</span><p>When life got heavy, your presence was the heat that transformed my cold days. We didn't break under pressure; we just became a version of 'us' that I never want to lose.</p></div>
+            <div class="story-card"><span>The Softness</span><p>You taught me that strength isn't about being hard; it's about the softness we show each other. Every rough edge I had, you smoothed away with just a smile.</p></div>
+            <div class="story-card"><span>The Choice</span><p>Months passed, and I stopped looking for 'perfection' because I found 'you'. You became the flavor of my every thought, the only rhythm my heart wanted to follow.</p></div>
+            <div class="story-card"><span>The Sweetness</span><p>Six months later, here we are. This isn't just chocolate; it's the earned sweetness of every laugh, every talk, and every day I chose you. And I’d choose you again, every single time.</p></div>
         </div>
 
-        <div class="fade-in visible" style="margin-top: 80px;">
+        <div class="fade-in visible" style="margin-top: 100px;">
             <p class="script-font">Not perfect. Just real.</p>
-            <p style="font-size: 14px; line-height: 2;">This sweetness was never meant to impress.<br>Only to be honest.</p>
+            <div class="punjabi-soul">"Tuc meri mohabbat di oh mithaas ho,<br>jisnu m kade khona nahi chaunda."</div>
             <p class="final-sig">WITH INTENTION, DEEP</p>
-            
-            <button class="restart-btn" onclick="restartJourney()">Begin Again</button>
         </div>
     </section>
 
     <script>
+        // Particles background
+        const pContainer = document.getElementById('particles');
+        for (let i = 0; i < 30; i++) {
+            const p = document.createElement('div');
+            p.style.position = 'absolute';
+            p.style.width = Math.random() * 3 + 'px';
+            p.style.height = p.style.width;
+            p.style.background = 'rgba(212, 163, 115, 0.3)';
+            p.style.borderRadius = '50%';
+            p.style.top = Math.random() * 100 + '%';
+            p.style.left = Math.random() * 100 + '%';
+            p.style.animation = `float ${Math.random() * 3 + 2}s infinite ease-in-out`;
+            pContainer.appendChild(p);
+        }
+
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.querySelector('.fade-in').classList.add('visible');
-                    if(entry.target.id === 'p1') document.body.style.backgroundColor = '#1a0f0a';
-                    if(entry.target.id === 'p2') document.body.style.backgroundColor = '#2b1a12';
-                    if(entry.target.id === 'p3') document.body.style.backgroundColor = '#332118';
-                    if(entry.target.id === 'p4') document.body.style.backgroundColor = '#3c2a21';
+                    if(entry.target.id === 'p1') document.body.style.backgroundColor = '#120907';
+                    if(entry.target.id === 'p2') document.body.style.backgroundColor = '#24140e';
+                    if(entry.target.id === 'p4') document.body.style.backgroundColor = '#2d1b14';
                 }
             });
         }, { threshold: 0.4 });
@@ -179,11 +162,8 @@
             e.preventDefault();
             spinner.style.opacity = "1";
             spinner.style.animation = "spin 2s linear infinite";
-            heart.style.transform = "scale(0.85)";
-            
-            pressTimer = window.setTimeout(function() {
-                revealFinal();
-            }, 2000);
+            heart.style.transform = "scale(0.8)";
+            pressTimer = window.setTimeout(revealFinal, 2000);
         }
 
         function cancelPress() {
@@ -203,20 +183,11 @@
             heart.style.opacity = "0";
             spinner.style.opacity = "0";
             document.getElementById('hint-text').style.opacity = "0";
-            
             setTimeout(() => {
                 document.getElementById('s-final').style.display = "flex";
                 document.getElementById('narrative-grid').style.display = "grid";
                 window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
             }, 600);
-        }
-
-        function restartJourney() {
-            // Reset visibility and background
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            setTimeout(() => {
-                location.reload(); // Simplest way to reset all animations and the heart
-            }, 800);
         }
     </script>
 </body>
