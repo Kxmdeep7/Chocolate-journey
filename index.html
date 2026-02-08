@@ -1,181 +1,223 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Chocolate Day</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>With Intention</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Quicksand:wght@300;500&display=swap');
 
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body { 
+            background-color: #1a0f0a; 
+            color: #fdfaf6;
+            font-family: 'Quicksand', sans-serif;
+            overflow-x: hidden;
+            transition: background-color 2.5s ease;
+        }
 
-body {
-  margin: 0;
-  font-family: 'Playfair Display', serif;
-  background: #f6efe9;
-  color: #1a1a1a;
-  overflow-x: hidden;
-}
+        section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px;
+        }
 
-section {
-  min-height: 100vh;
-  padding: 80px 15%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-}
+        .fade-in { opacity: 0; transform: translateY(20px); transition: all 1.5s ease-out; }
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
 
-.fade {
-  opacity: 0;
-  transform: translateY(40px);
-  transition: all 1.2s ease;
-}
+        .script-font { font-family: 'Dancing Script', cursive; font-size: 34px; color: #d4a373; margin-bottom: 20px; }
 
-.fade.show {
-  opacity: 1;
-  transform: translateY(0);
-}
+        .melt-container {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin: 40px auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
 
-p {
-  font-size: 1.8rem;
-  line-height: 1.6;
-  max-width: 800px;
-}
+        .choc-heart {
+            font-size: 65px;
+            transition: transform 0.3s, opacity 0.8s;
+            z-index: 2;
+        }
 
-.dark {
-  background: #e6d6c8;
-}
+        .melt-progress {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 1px solid rgba(212, 163, 115, 0.3);
+            border-top: 2px solid #d4a373;
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
 
-#chocolate {
-  width: 220px;
-  height: 220px;
-  background: #4b2e1f;
-  border-radius: 12px;
-  cursor: pointer;
-  display: flex;
-  flex-wrap: wrap;
-  overflow: hidden;
-}
+        #narrative-grid {
+            display: none;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            width: 100%;
+            max-width: 350px;
+            margin-top: 40px;
+        }
 
-.piece {
-  width: 50%;
-  height: 33.33%;
-  border: 1px solid rgba(255,255,255,0.1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1rem;
-  padding: 10px;
-  color: #fff;
-  opacity: 0;
-  transition: opacity 0.6s ease;
-}
+        .story-card {
+            background: rgba(255, 255, 255, 0.02);
+            border-left: 2px solid #d4a373;
+            padding: 20px;
+            text-align: left;
+        }
 
-.piece.show {
-  opacity: 1;
-}
+        .story-card p { font-size: 15px; line-height: 1.7; opacity: 0.9; font-weight: 300; }
 
-footer {
-  min-height: 100vh;
-  background: #d8c4b3;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 60px;
-}
-</style>
+        .final-sig { margin-top: 80px; font-style: italic; opacity: 0.5; font-size: 13px; letter-spacing: 2px; }
+
+        /* Restart Button Styling */
+        .restart-btn {
+            margin-top: 60px;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid rgba(212, 163, 115, 0.4);
+            color: #d4a373;
+            padding: 10px 0;
+            font-size: 11px;
+            letter-spacing: 3px;
+            cursor: pointer;
+            text-transform: uppercase;
+            opacity: 0.6;
+            transition: 0.3s;
+        }
+
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
 </head>
-
 <body>
 
-<section>
-  <p class="fade">
-    Before chocolate becomes sweet,<br>
-    it begins bitter.<br><br>
-    Just like most honest things.
-  </p>
-</section>
+    <section id="p1">
+        <div class="fade-in">
+            <p class="script-font">The Beginning</p>
+            <p>"Before chocolate becomes sweet, it begins bitter. Just like most honest things."</p>
+        </div>
+    </section>
 
-<section class="dark">
-  <p class="fade">
-    Taken from the earth,<br>
-    handled with care.<br><br>
-    Because rushing ruins flavor.
-  </p>
-</section>
+    <section id="p2">
+        <div class="fade-in">
+            <p class="script-font">The Transformation</p>
+            <p>Heat changes everything. Too much, and it burns. Too little, and it stays raw.</p>
+            <p style="margin-top:15px; font-size:14px; color:#d4a373; letter-spacing: 1px;">We found our balance.</p>
+        </div>
+    </section>
 
-<section>
-  <p class="fade">
-    Heat changes everything.<br>
-    But only when it’s controlled.<br><br>
-    Too much burns.<br>
-    Too little leaves it raw.
-  </p>
-</section>
+    <section id="p3">
+        <div class="fade-in">
+            <p class="script-font">The Refinement</p>
+            <p>Ground slowly. Turned again and again. Until bitterness learns softness.</p>
+        </div>
+    </section>
 
-<section class="dark">
-  <p class="fade">
-    Ground slowly.<br>
-    Turned again and again.<br><br>
-    Until bitterness learns softness.
-  </p>
-</section>
+    <section id="p4">
+        <div class="fade-in" style="width: 100%;">
+            <p class="script-font">The Patience</p>
+            <p style="font-size: 14px; opacity: 0.8;">Some things shouldn't be rushed.</p>
+            
+            <div class="melt-container" id="melt-trigger">
+                <div class="melt-progress" id="spinner"></div>
+                <div class="choc-heart" id="heart-icon">🤎</div>
+            </div>
+            <p id="hint-text" style="font-size: 11px; color: #d4a373; letter-spacing: 2px;">HOLD TO UNVEIL</p>
+        </div>
+    </section>
 
-<section>
-  <div class="fade">
-    <p>Only after patience,<br>does sweetness take shape.</p>
-    <br><br>
-    <div id="chocolate"></div>
-    <p style="margin-top:20px;font-size:1rem;">Take your time.</p>
-  </div>
-</section>
+    <section id="s-final" style="display:none; min-height: auto; padding-bottom: 120px;">
+        <div id="narrative-grid">
+            <div class="story-card"><p>We started as a simple seed—raw and unrefined. I didn't know then how much sweetness you were hiding, but I knew I wanted to find out.</p></div>
+            <div class="story-card"><p>Handling our bond with care. Every conversation was like gathering the best parts of us, learning that nothing beautiful should ever be rushed.</p></div>
+            <div class="story-card"><p>Things got warmer. We faced our first little "heats," but they only made us stronger. We didn't burn; we just became more real.</p></div>
+            <div class="story-card"><p>This is where the bitterness learned softness. We smoothed out our edges together, turning our differences into a perfect flow.</p></div>
+            <div class="story-card"><p>Spending hours just revolving around each other until I realized you weren't just a part of my life; you became my favorite flavor.</p></div>
+            <div class="story-card"><p>Finally, we take shape. Six months of patience has turned us into this—something solid, something sweet, something meant to last.</p></div>
+        </div>
 
-<footer>
-  <p class="fade">
-    This isn’t a confession.<br>
-    It isn’t a request.<br><br>
-    It’s just a moment,<br>
-    wrapped gently.<br><br>
-    — with intention
-  </p>
-</footer>
+        <div class="fade-in visible" style="margin-top: 80px;">
+            <p class="script-font">Not perfect. Just real.</p>
+            <p style="font-size: 14px; line-height: 2;">This sweetness was never meant to impress.<br>Only to be honest.</p>
+            <p class="final-sig">WITH INTENTION, DEEP</p>
+            
+            <button class="restart-btn" onclick="restartJourney()">Begin Again</button>
+        </div>
+    </section>
 
-<script>
-const fades = document.querySelectorAll('.fade');
+    <script>
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.querySelector('.fade-in').classList.add('visible');
+                    if(entry.target.id === 'p1') document.body.style.backgroundColor = '#1a0f0a';
+                    if(entry.target.id === 'p2') document.body.style.backgroundColor = '#2b1a12';
+                    if(entry.target.id === 'p3') document.body.style.backgroundColor = '#332118';
+                    if(entry.target.id === 'p4') document.body.style.backgroundColor = '#3c2a21';
+                }
+            });
+        }, { threshold: 0.4 });
 
-window.addEventListener('scroll', () => {
-  fades.forEach(el => {
-    const rect = el.getBoundingClientRect();
-    if (rect.top < window.innerHeight - 100) {
-      el.classList.add('show');
-    }
-  });
-});
+        document.querySelectorAll('section').forEach(s => observer.observe(s));
 
-const messages = [
-  "It began without intention. Just presence.",
-  "Your silence didn’t feel empty. It felt safe.",
-  "I didn’t chase, yet my thoughts learned you.",
-  "Somewhere, I stopped pretending I wasn’t affected.",
-  "Real feelings don’t rush. They respect.",
-  "Six months later, the sweetness stayed."
-];
+        let pressTimer;
+        const trigger = document.getElementById('melt-trigger');
+        const heart = document.getElementById('heart-icon');
+        const spinner = document.getElementById('spinner');
 
-const chocolate = document.getElementById('chocolate');
+        function startPress(e) {
+            e.preventDefault();
+            spinner.style.opacity = "1";
+            spinner.style.animation = "spin 2s linear infinite";
+            heart.style.transform = "scale(0.85)";
+            
+            pressTimer = window.setTimeout(function() {
+                revealFinal();
+            }, 2000);
+        }
 
-messages.forEach(text => {
-  const div = document.createElement('div');
-  div.className = 'piece';
-  div.innerText = text;
-  chocolate.appendChild(div);
-});
+        function cancelPress() {
+            clearTimeout(pressTimer);
+            spinner.style.opacity = "0";
+            spinner.style.animation = "none";
+            heart.style.transform = "scale(1)";
+        }
 
-chocolate.addEventListener('click', () => {
-  document.querySelectorAll('.piece').forEach((p, i) => {
-    setTimeout(() => p.classList.add('show'), i * 400);
-  });
-});
-</script>
+        trigger.addEventListener('mousedown', startPress);
+        trigger.addEventListener('touchstart', startPress);
+        trigger.addEventListener('mouseup', cancelPress);
+        trigger.addEventListener('touchend', cancelPress);
 
+        function revealFinal() {
+            heart.style.transform = "scale(0)";
+            heart.style.opacity = "0";
+            spinner.style.opacity = "0";
+            document.getElementById('hint-text').style.opacity = "0";
+            
+            setTimeout(() => {
+                document.getElementById('s-final').style.display = "flex";
+                document.getElementById('narrative-grid').style.display = "grid";
+                window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+            }, 600);
+        }
+
+        function restartJourney() {
+            // Reset visibility and background
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            setTimeout(() => {
+                location.reload(); // Simplest way to reset all animations and the heart
+            }, 800);
+        }
+    </script>
 </body>
 </html>
