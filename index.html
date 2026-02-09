@@ -10,19 +10,20 @@
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         
         body { 
-            background-color: #0c0605; 
+            background-color: #0c0605; /* Starting Color */
             color: #fdfaf6;
             font-family: 'Lora', serif;
             overflow-x: hidden;
             scroll-behavior: smooth;
+            transition: background-color 2.5s ease; /* Smooth transition for background */
         }
 
         /* 1. THE GATEKEEPER */
         #hold-screen {
             height: 100vh; width: 100%; display: flex; flex-direction: column; 
             justify-content: center; align-items: center; z-index: 1000;
-            position: fixed; background: #0c0605;
-            transition: opacity 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: fixed; background: inherit; /* Matches body */
+            transition: opacity 1.5s ease;
         }
 
         .melt-container {
@@ -66,7 +67,6 @@
             z-index: 2002; opacity: 1;
         }
 
-        /* Message Glow Effect */
         .final-msg {
             text-align: center;
             font-family: 'Dancing Script', cursive;
@@ -83,7 +83,7 @@
         .final-msg span {
             display: block;
             font-family: 'Lora', serif;
-            font-size: 12px;
+            font-size: 11px;
             letter-spacing: 4px;
             text-transform: uppercase;
             margin-top: 30px;
@@ -106,7 +106,7 @@
     </div>
 
     <div id="journey-screen">
-        <div class="story-moment">
+        <div class="story-moment" data-bg="#0c0605">
             <div class="story-emoji">🌱</div>
             <p class="story-text">Some things start
             without asking to be defined.
@@ -115,7 +115,7 @@
             something feels easy to be around.</p>
         </div>
         
-        <div class="story-moment">
+        <div class="story-moment" data-bg="#1a110a">
             <div class="story-emoji">🌾</div>
             <p class="story-text">Care doesn’t always look like action.
             Sometimes it’s just attention.
@@ -125,7 +125,7 @@
             Nothing held too tightly.</p>
         </div>
 
-        <div class="story-moment">
+        <div class="story-moment" data-bg="#26180e">
             <div class="story-emoji">🔥</div>
             <p class="story-text">Not everything stays light.
             And that’s okay.
@@ -135,7 +135,7 @@
             because they’re allowed to.</p>
         </div>
 
-        <div class="story-moment">
+        <div class="story-moment" data-bg="#2e1d13">
             <div class="story-emoji">🌊</div>
             <p class="story-text">With time, edges soften.
             Silence feels less heavy.
@@ -144,7 +144,7 @@
             to feel steady.</p>
         </div>
 
-        <div class="story-moment">
+        <div class="story-moment" data-bg="#3b2518">
             <div class="story-emoji">🍫</div>
             <p class="story-text">And somewhere in that calm,
             sweetness appears.
@@ -204,7 +204,12 @@
             const moments = document.querySelectorAll('.story-moment');
             moments.forEach(m => {
                 const rect = m.getBoundingClientRect();
-                if (rect.top < window.innerHeight * 0.8) {
+                // If the moment is in the center of the screen
+                if (rect.top < window.innerHeight * 0.5 && rect.bottom > window.innerHeight * 0.5) {
+                    m.classList.add('show');
+                    // Change background color based on the data-bg attribute
+                    document.body.style.backgroundColor = m.getAttribute('data-bg');
+                } else if (rect.top < window.innerHeight * 0.8) {
                     m.classList.add('show');
                 }
             });
