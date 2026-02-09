@@ -10,19 +10,27 @@
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         
         body { 
-            background-color: #0c0605; /* Starting Color */
+            background-color: #0c0605;
             color: #fdfaf6;
             font-family: 'Lora', serif;
             overflow-x: hidden;
             scroll-behavior: smooth;
-            transition: background-color 2.5s ease; /* Smooth transition for background */
+        }
+
+        /* DYNAMIC TEXTURED BACKGROUND */
+        #bg-canvas {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background: radial-gradient(circle at 50% 50%, #1a110a 0%, #0c0605 100%);
+            transition: background 3s ease;
         }
 
         /* 1. THE GATEKEEPER */
         #hold-screen {
             height: 100vh; width: 100%; display: flex; flex-direction: column; 
             justify-content: center; align-items: center; z-index: 1000;
-            position: fixed; background: inherit; /* Matches body */
+            position: fixed; background: transparent;
             transition: opacity 1.5s ease;
         }
 
@@ -53,13 +61,14 @@
 
         .story-moment.show { opacity: 1; transform: translateY(0); }
 
-        .story-emoji { font-size: 45px; margin-bottom: 30px; }
+        .story-emoji { font-size: 45px; margin-bottom: 30px; filter: drop-shadow(0 0 10px rgba(212, 163, 115, 0.3)); }
         .story-text { font-size: 19px; line-height: 1.8; font-style: italic; font-weight: 300; max-width: 360px; white-space: pre-line; }
 
         /* 3. THE MELT REVEAL */
         #final-reveal {
             display: none; position: fixed; inset: 0; z-index: 2000;
-            background: #000; justify-content: center; align-items: center;
+            background: radial-gradient(circle at 50% 50%, #2e1d13 0%, #000000 100%); /* Warm Glow Background */
+            justify-content: center; align-items: center;
         }
 
         .choc-bite {
@@ -77,7 +86,7 @@
             transition: 4s all ease;
             padding: 20px;
             line-height: 1.6;
-            text-shadow: 0 0 20px rgba(212, 163, 115, 0.3);
+            text-shadow: 0 0 30px rgba(212, 163, 115, 0.4);
         }
 
         .final-msg span {
@@ -96,6 +105,8 @@
 </head>
 <body>
 
+    <div id="bg-canvas"></div>
+
     <div id="hold-screen">
         <p style="font-family: 'Dancing Script', cursive; font-size: 42px; color: #d4a373; margin-bottom: 15px;">The Essence</p>
         <div class="melt-container" id="melt-trigger">
@@ -106,7 +117,7 @@
     </div>
 
     <div id="journey-screen">
-        <div class="story-moment" data-bg="#0c0605">
+        <div class="story-moment" data-glow="#1a110a">
             <div class="story-emoji">🌱</div>
             <p class="story-text">Some things start
             without asking to be defined.
@@ -115,7 +126,7 @@
             something feels easy to be around.</p>
         </div>
         
-        <div class="story-moment" data-bg="#1a110a">
+        <div class="story-moment" data-glow="#26180e">
             <div class="story-emoji">🌾</div>
             <p class="story-text">Care doesn’t always look like action.
             Sometimes it’s just attention.
@@ -125,7 +136,7 @@
             Nothing held too tightly.</p>
         </div>
 
-        <div class="story-moment" data-bg="#26180e">
+        <div class="story-moment" data-glow="#3b2518">
             <div class="story-emoji">🔥</div>
             <p class="story-text">Not everything stays light.
             And that’s okay.
@@ -135,7 +146,7 @@
             because they’re allowed to.</p>
         </div>
 
-        <div class="story-moment" data-bg="#2e1d13">
+        <div class="story-moment" data-glow="#4a2f1f">
             <div class="story-emoji">🌊</div>
             <p class="story-text">With time, edges soften.
             Silence feels less heavy.
@@ -144,7 +155,7 @@
             to feel steady.</p>
         </div>
 
-        <div class="story-moment" data-bg="#3b2518">
+        <div class="story-moment" data-glow="#5c3b26">
             <div class="story-emoji">🍫</div>
             <p class="story-text">And somewhere in that calm,
             sweetness appears.
@@ -170,6 +181,7 @@
         const trigger = document.getElementById('melt-trigger');
         const heart = document.getElementById('heart-icon');
         const spinner = document.getElementById('spinner');
+        const bg = document.getElementById('bg-canvas');
 
         function startPress(e) {
             e.preventDefault();
@@ -204,11 +216,10 @@
             const moments = document.querySelectorAll('.story-moment');
             moments.forEach(m => {
                 const rect = m.getBoundingClientRect();
-                // If the moment is in the center of the screen
                 if (rect.top < window.innerHeight * 0.5 && rect.bottom > window.innerHeight * 0.5) {
                     m.classList.add('show');
-                    // Change background color based on the data-bg attribute
-                    document.body.style.backgroundColor = m.getAttribute('data-bg');
+                    const glowColor = m.getAttribute('data-glow');
+                    bg.style.background = `radial-gradient(circle at 50% 50%, ${glowColor} 0%, #0c0605 100%)`;
                 } else if (rect.top < window.innerHeight * 0.8) {
                     m.classList.add('show');
                 }
